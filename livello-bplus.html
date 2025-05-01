@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
   <title>Livello BPLUS</title>
-  <link href="style.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
   <div class="container mt-4">
@@ -20,138 +20,119 @@
           <th>Differenza</th>
         </tr>
       </thead>
-      <tbody>
-        
-        <tr>
-            <td>Block Busters</td>
-            <td>3</td>
-            <td>4</td>
-            <td>292</td>
-            <td>208</td>
-            <td>84</td>
-        </tr>
-        <tr>
-            <td>Jump Setters</td>
-            <td>3</td>
-            <td>7</td>
-            <td>226</td>
-            <td>201</td>
-            <td>25</td>
-        </tr>
-        <tr>
-            <td>Quick Spikers</td>
-            <td>7</td>
-            <td>3</td>
-            <td>153</td>
-            <td>274</td>
-            <td>-121</td>
-        </tr>
-        <tr>
-            <td>Set and Smash</td>
-            <td>6</td>
-            <td>7</td>
-            <td>268</td>
-            <td>200</td>
-            <td>68</td>
-        </tr>
-        <tr>
-            <td>Smash & Serve</td>
-            <td>8</td>
-            <td>5</td>
-            <td>195</td>
-            <td>217</td>
-            <td>-22</td>
-        </tr>
+      <tbody id="standings-body">
+        <tr><td colspan="6">Caricamento classifica...</td></tr>
       </tbody>
     </table>
 
-    <h2 class="mt-5">Calendario Partite</h2>
+    <h2 class="mt-5">Calendario Partite e Risultati</h2>
     <table class="table table-striped">
       <thead class="table-light">
         <tr>
           <th>Squadra 1</th>
+          <th>Set 1</th>
+          <th>Punti 1</th>
           <th>Squadra 2</th>
+          <th>Set 2</th>
+          <th>Punti 2</th>
           <th>Campo</th>
           <th>Ora</th>
-          <th>Arbitra</th>
+          <th>Arbitro</th>
         </tr>
       </thead>
-      <tbody>
-        
-        <tr>
-            <td>Block Busters</td>
-            <td>Jump Setters</td>
-            <td>Campo 2</td>
-            <td>17:00</td>
-            <td>Smash & Serve</td>
-        </tr>
-        <tr>
-            <td>Block Busters</td>
-            <td>Quick Spikers</td>
-            <td>Campo 3</td>
-            <td>10:00</td>
-            <td>Set and Smash</td>
-        </tr>
-        <tr>
-            <td>Block Busters</td>
-            <td>Set and Smash</td>
-            <td>Campo 2</td>
-            <td>11:00</td>
-            <td>Smash & Serve</td>
-        </tr>
-        <tr>
-            <td>Block Busters</td>
-            <td>Smash & Serve</td>
-            <td>Campo 1</td>
-            <td>14:00</td>
-            <td>Quick Spikers</td>
-        </tr>
-        <tr>
-            <td>Jump Setters</td>
-            <td>Quick Spikers</td>
-            <td>Campo 2</td>
-            <td>16:00</td>
-            <td>Set and Smash</td>
-        </tr>
-        <tr>
-            <td>Jump Setters</td>
-            <td>Set and Smash</td>
-            <td>Campo 3</td>
-            <td>12:00</td>
-            <td>Block Busters</td>
-        </tr>
-        <tr>
-            <td>Jump Setters</td>
-            <td>Smash & Serve</td>
-            <td>Campo 2</td>
-            <td>17:00</td>
-            <td>Block Busters</td>
-        </tr>
-        <tr>
-            <td>Quick Spikers</td>
-            <td>Set and Smash</td>
-            <td>Campo 2</td>
-            <td>16:00</td>
-            <td>Smash & Serve</td>
-        </tr>
-        <tr>
-            <td>Quick Spikers</td>
-            <td>Smash & Serve</td>
-            <td>Campo 1</td>
-            <td>17:00</td>
-            <td>Set and Smash</td>
-        </tr>
-        <tr>
-            <td>Set and Smash</td>
-            <td>Smash & Serve</td>
-            <td>Campo 1</td>
-            <td>18:00</td>
-            <td>Quick Spikers</td>
-        </tr>
+      <tbody id="calendario-body">
+        <tr><td colspan="9">Caricamento dati...</td></tr>
       </tbody>
     </table>
 
-    <a href="index.html" class="btn btn-secondary mt-4">Torna alla Home</a>
+    <a class="btn btn-secondary mt-4" href="index.html">Torna alla Home</a>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("LivelloBPLUS.csv")
+        .then(response => response.text())
+        .then(text => {
+          const lines = text.trim().split("\n").slice(1);
+          const safe = value => value && value.trim() !== "" ? value.trim() : "-";
+          const tbodyResults = document.getElementById("calendario-body");
+          const tbodyStandings = document.getElementById("standings-body");
+          const stats = {};
+
+          tbodyResults.innerHTML = "";
+
+          lines.forEach(line => {
+            const cells = line.split(",");
+            const team1 = safe(cells[0]);
+            const team2 = safe(cells[1]);
+            const campo = safe(cells[2]);
+            const ora = safe(cells[3]);
+            const arbitro = safe(cells[4]);
+            const set1 = parseInt(cells[5]) || 0;
+            const set2 = parseInt(cells[6]) || 0;
+            const punti1 = parseInt(cells[7]) || 0;
+            const punti2 = parseInt(cells[8]) || 0;
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${team1}</td>
+              <td>${set1}</td>
+              <td>${punti1}</td>
+              <td>${team2}</td>
+              <td>${set2}</td>
+              <td>${punti2}</td>
+              <td>${campo}</td>
+              <td>${ora}</td>
+              <td>${arbitro}</td>
+            `;
+            tbodyResults.appendChild(tr);
+
+            [team1, team2].forEach(team => {
+              if (!stats[team]) {
+                stats[team] = {
+                  setVinti: 0,
+                  setPersi: 0,
+                  puntiFatti: 0,
+                  puntiSubiti: 0
+                };
+              }
+            });
+
+            stats[team1].setVinti += set1;
+            stats[team1].setPersi += set2;
+            stats[team1].puntiFatti += punti1;
+            stats[team1].puntiSubiti += punti2;
+
+            stats[team2].setVinti += set2;
+            stats[team2].setPersi += set1;
+            stats[team2].puntiFatti += punti2;
+            stats[team2].puntiSubiti += punti1;
+          });
+
+          const sorted = Object.entries(stats).sort((a, b) => {
+            if (b[1].setVinti !== a[1].setVinti) {
+              return b[1].setVinti - a[1].setVinti;
+            }
+            const diffA = a[1].puntiFatti - a[1].puntiSubiti;
+            const diffB = b[1].puntiFatti - b[1].puntiSubiti;
+            return diffB - diffA;
+          });
+
+          tbodyStandings.innerHTML = "";
+          sorted.forEach(([team, data]) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${team}</td>
+              <td>${data.setVinti}</td>
+              <td>${data.setPersi}</td>
+              <td>${data.puntiFatti}</td>
+              <td>${data.puntiSubiti}</td>
+              <td>${data.puntiFatti - data.puntiSubiti}</td>
+            `;
+            tbodyStandings.appendChild(row);
+          });
+        });
+    });
+  </script>
 </body>
 </html>
