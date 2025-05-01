@@ -1,39 +1,77 @@
-# Directory where the modified files will be saved
-base_dir = os.path.join(extract_dir, "pcascarano.github.io-main")
-
-# Content for team pages (fictional team names)
-teams = {
-    "a": ["Volley Elite", "Spike Masters", "Net Ninjas", "Ace Hunters", "Top Servers"],
-    "bplus": ["Block Busters", "Jump Setters", "Quick Spikers", "Set and Smash", "Smash & Serve"],
-    "b": ["Volley Squad", "Baseline Boomers", "Diggers United", "Team Float", "Jump Force"],
-    "cplus": ["Low Net Legends", "Casual Smashers", "Volley Buddies", "Friendly Fire", "Just 4 Fun"],
-    "c": ["Beginner Blasters", "Practice Pros", "Learning Setters", "Trial & Error", "Newbie Aces"]
-}
-
-# Create HTML content for each level
-team_pages = {}
-for level_key, team_list in teams.items():
-    title = level_key.upper() if "+" not in level_key else level_key[0].upper() + "+"
-    filename = f"livello-{level_key}.html"
-    content = f"""<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <title>Squadre Livello {title}</title>
-  <link href="style.css" rel="stylesheet">
-</head>
-<body>
-  <div class="container">
-    <h1>Squadre Livello {title}</h1>
-    <ul>
-      {''.join(f"<li>{team}</li>" for team in team_list)}
-    </ul>
-    <a href="index.html">Torna indietro</a>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Livelli Volley
+  </title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <div class="container text-center mt-5">
+   <h1 class="mb-4">
+    Livelli Volley
+   </h1>
+   <div class="row justify-content-center g-4">
+    <div class="col-6 col-md-2">
+     <div class="card shadow">
+      <div class="card-body">
+       <a class="stretched-link text-decoration-none text-dark" href="livello-a.html">
+        <h3 class="card-title" id="displayLevelA">
+         A
+        </h3>
+       </a>
+      </div>
+     </div>
+    </div>
+    <div class="col-6 col-md-2">
+     <div class="card shadow">
+      <div class="card-body">
+       <a class="stretched-link text-decoration-none text-dark" href="livello-bplus.html">
+        <h3 class="card-title" id="displayLevelBPlus">
+         B+
+        </h3>
+       </a>
+      </div>
+     </div>
+    </div>
+    <div class="col-6 col-md-2">
+     <div class="card shadow">
+      <div class="card-body">
+       <a class="stretched-link text-decoration-none text-dark" href="livello-b.html">
+        <h3 class="card-title" id="displayLevelB">
+         B
+        </h3>
+       </a>
+      </div>
+     </div>
+    </div>
+    <div class="col-6 col-md-2">
+     <div class="card shadow">
+      <div class="card-body">
+       <a class="stretched-link text-decoration-none text-dark" href="livello-cplus.html">
+        <h3 class="card-title" id="displayLevelCPlus">
+         C+
+        </h3>
+       </a>
+      </div>
+     </div>
+    </div>
+    <div class="col-6 col-md-2">
+     <div class="card shadow">
+      <div class="card-body">
+       <a class="stretched-link text-decoration-none text-dark" href="livello-c.html">
+        <h3 class="card-title" id="displayLevelC">
+         C
+        </h3>
+       </a>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="mt-4">
+   </div>
   </div>
-</body>
+ </body>
 </html>
-"""
-    team_pages[filename] = content
-
-team_pages.keys()  # Show names of new files to be created
-
