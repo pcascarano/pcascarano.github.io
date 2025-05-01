@@ -139,40 +139,6 @@
      </tr>
     </tbody>
    </table>
-   <h2 class="mt-5">
-    Calendario Partite
-   </h2>
-   <h2 class="mt-5">
-    Calendario Partite
-   </h2>
-   <table class="table table-striped">
-    <thead class="table-light">
-     <tr>
-      <th>
-       Squadra 1
-      </th>
-      <th>
-       Squadra 2
-      </th>
-      <th>
-       Campo
-      </th>
-      <th>
-       Ora
-      </th>
-      <th>
-       Arbitro
-      </th>
-     </tr>
-    </thead>
-    <tbody id="calendario-body">
-     <tr>
-      <td colspan="5">
-       Caricamento dati...
-      </td>
-     </tr>
-    </tbody>
-   </table>
    <a class="btn btn-secondary mt-4" href="index.html">
     Torna alla Home
    </a>
@@ -192,7 +158,11 @@
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${row["Squadra 1"]}</td>
+            <td>${row["Set 1 Vinti"]}</td>
+            <td>${row["Punti 1"]}</td>
             <td>${row["Squadra 2"]}</td>
+            <td>${row["Set 2 Vinti"]}</td>
+            <td>${row["Punti 2"]}</td>
             <td>${row["Campo"]}</td>
             <td>${row["Ora"]}</td>
             <td>${row["Arbitro"]}</td>
