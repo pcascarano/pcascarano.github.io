@@ -194,26 +194,87 @@
       .then(response => response.text())
       .then(text => {
         const rows = text.trim().split("\n").slice(1);
-        const tbody = document.getElementById("calendario-body");
-        tbody.innerHTML = "";
-
         const safe = value => value && value.trim() !== "" ? value.trim() : "-";
+        const tbodyResults = document.getElementById("calendario-body");
+        const tbodyStandings = document.getElementById("standings-body");
+        const stats = {};
+
+        tbodyResults.innerHTML = "";
 
         rows.forEach(row => {
           const cells = row.split(",");
+          const team1 = safe(cells[0]);
+          const team2 = safe(cells[1]);
+          const campo = safe(cells[2]);
+          const ora = safe(cells[3]);
+          const arbitro = safe(cells[4]);
+          const set1 = parseInt(cells[5]) || 0;
+          const set2 = parseInt(cells[6]) || 0;
+          const punti1 = parseInt(cells[7]) || 0;
+          const punti2 = parseInt(cells[8]) || 0;
+
+          // Aggiunge riga alla tabella partite
           const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td>${safe(cells[0])}</td>
-            <td>${safe(cells[5])}</td>
-            <td>${safe(cells[7])}</td>
-            <td>${safe(cells[1])}</td>
-            <td>${safe(cells[6])}</td>
-            <td>${safe(cells[8])}</td>
-            <td>${safe(cells[2])}</td>
-            <td>${safe(cells[3])}</td>
-            <td>${safe(cells[4])}</td>
+            <td>${team1}</td>
+            <td>${set1}</td>
+            <td>${punti1}</td>
+            <td>${team2}</td>
+            <td>${set2}</td>
+            <td>${punti2}</td>
+            <td>${campo}</td>
+            <td>${ora}</td>
+            <td>${arbitro}</td>
           `;
-          tbody.appendChild(tr);
+          tbodyResults.appendChild(tr);
+
+          // Inizializza squadre nella classifica
+          [team1, team2].forEach(team => {
+            if (!stats[team]) {
+              stats[team] = {
+                setVinti: 0,
+                setPersi: 0,
+                puntiFatti: 0,
+                puntiSubiti: 0
+              };
+            }
+          });
+
+          // Aggiorna statistiche
+          stats[team1].setVinti += set1;
+          stats[team1].setPersi += set2;
+          stats[team1].puntiFatti += punti1;
+          stats[team1].puntiSubiti += punti2;
+
+          stats[team2].setVinti += set2;
+          stats[team2].setPersi += set1;
+          stats[team2].puntiFatti += punti2;
+          stats[team2].puntiSubiti += punti1;
+        });
+
+        // Ordina squadre: prima per set vinti, poi per differenza punti
+        const sorted = Object.entries(stats).sort((a, b) => {
+          const [teamA, dataA] = a;
+          const [teamB, dataB] = b;
+          if (dataB.setVinti !== dataA.setVinti) return dataB.setVinti - dataA.setVinti;
+          const diffA = dataA.puntiFatti - dataA.puntiSubiti;
+          const diffB = dataB.puntiFatti - dataB.puntiSubiti;
+          return diffB - diffA;
+        });
+
+        // Riempie tabella classifica
+        tbodyStandings.innerHTML = "";
+        sorted.forEach(([team, data]) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${team}</td>
+            <td>${data.setVinti}</td>
+            <td>${data.setPersi}</td>
+            <td>${data.puntiFatti}</td>
+            <td>${data.puntiSubiti}</td>
+            <td>${data.puntiFatti - data.puntiSubiti}</td>
+          `;
+          tbodyStandings.appendChild(row);
         });
       });
   });
