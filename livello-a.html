@@ -193,7 +193,7 @@
     fetch("LivelloA.csv")
       .then(response => response.text())
       .then(text => {
-        const rows = text.trim().split("\n").slice(1);
+        const lines = text.trim().split("\n").slice(1);
         const safe = value => value && value.trim() !== "" ? value.trim() : "-";
         const tbodyResults = document.getElementById("calendario-body");
         const tbodyStandings = document.getElementById("standings-body");
@@ -201,8 +201,8 @@
 
         tbodyResults.innerHTML = "";
 
-        rows.forEach(row => {
-          const cells = row.split(",");
+        lines.forEach(line => {
+          const cells = line.split(",");
           const team1 = safe(cells[0]);
           const team2 = safe(cells[1]);
           const campo = safe(cells[2]);
@@ -213,7 +213,6 @@
           const punti1 = parseInt(cells[7]) || 0;
           const punti2 = parseInt(cells[8]) || 0;
 
-          // Aggiunge riga alla tabella partite
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${team1}</td>
@@ -228,7 +227,6 @@
           `;
           tbodyResults.appendChild(tr);
 
-          // Inizializza squadre nella classifica
           [team1, team2].forEach(team => {
             if (!stats[team]) {
               stats[team] = {
@@ -240,7 +238,6 @@
             }
           });
 
-          // Aggiorna statistiche
           stats[team1].setVinti += set1;
           stats[team1].setPersi += set2;
           stats[team1].puntiFatti += punti1;
@@ -252,17 +249,15 @@
           stats[team2].puntiSubiti += punti1;
         });
 
-        // Ordina squadre: prima per set vinti, poi per differenza punti
         const sorted = Object.entries(stats).sort((a, b) => {
-          const [teamA, dataA] = a;
-          const [teamB, dataB] = b;
-          if (dataB.setVinti !== dataA.setVinti) return dataB.setVinti - dataA.setVinti;
-          const diffA = dataA.puntiFatti - dataA.puntiSubiti;
-          const diffB = dataB.puntiFatti - dataB.puntiSubiti;
+          if (b[1].setVinti !== a[1].setVinti) {
+            return b[1].setVinti - a[1].setVinti;
+          }
+          const diffA = a[1].puntiFatti - a[1].puntiSubiti;
+          const diffB = b[1].puntiFatti - b[1].puntiSubiti;
           return diffB - diffA;
         });
 
-        // Riempie tabella classifica
         tbodyStandings.innerHTML = "";
         sorted.forEach(([team, data]) => {
           const row = document.createElement("tr");
