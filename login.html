@@ -5,18 +5,18 @@
   <title>Login</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 400px; margin: 30px auto; }
-    form label { display: block; margin-top: 10px; }
-    input, button { padding: 6px; width: 100%; margin-top: 4px; }
-    button { background-color: #28a745; color: white; border: none; margin-top: 20px; }
+    body {{ font-family: Arial, sans-serif; max-width: 400px; margin: 30px auto; }}
+    form label {{ display: block; margin-top: 10px; }}
+    input, button {{ padding: 6px; width: 100%; margin-top: 4px; }}
+    button {{ background-color: #28a745; color: white; border: none; margin-top: 20px; }}
   </style>
 </head>
 <body>
-  <h2>Accedi</h2>
+  <h2>Accedi al Torneo</h2>
 
   <form id="login-form">
-    <label>Email: <input type="email" name="email" required></label>
-    <label>Password: <input type="password" name="password" required></label>
+    <label>Email: <input type="email" id="email" required></label>
+    <label>Password: <input type="password" id="password" required></label>
     <button type="submit">Login</button>
   </form>
 
@@ -24,25 +24,23 @@
 
   <script>
     const supabase = supabase.createClient(
-      'https://zhueyazcbctwnkfflckr.supabase.co',   // 🔁 Sostituisci con il tuo URL
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpodWV5YXpjYmN0d25rZmZsY2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzOTIwNTUsImV4cCI6MjA2MTk2ODA1NX0.Ohx2wRmw2-QVqJ8iYgeJwp8mWL8bTeLKkNF-HG4eTkE'                     // 🔁 Sostituisci con la tua chiave anon
+      'https://zhueyazcbctwnkfflckr.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpodWV5YXpjYmN0d25rZmZsY2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzOTIwNTUsImV4cCI6MjA2MTk2ODA1NX0.Ohx2wRmw2-QVqJ8iYgeJwp8mWL8bTeLKkNF-HG4eTkE'
     );
 
     document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const formData = new FormData(e.target);
-      const email = formData.get('email');
-      const password = formData.get('password');
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const {{ data, error }} = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
         document.getElementById('status').textContent = 'Errore: ' + error.message;
       } else {
         document.getElementById('status').style.color = 'green';
-        document.getElementById('status').textContent = 'Accesso riuscito!';
-        // Redirect alla pagina di modifica
-        window.location.href = 'edit.html';
+        document.getElementById('status').textContent = 'Login effettuato!';
+        window.location.href = 'livello-a.html';
       }
     });
   </script>
