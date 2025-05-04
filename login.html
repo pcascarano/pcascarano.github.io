@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -5,21 +6,19 @@
   <title>Login</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body {{ font-family: Arial, sans-serif; max-width: 400px; margin: 30px auto; }}
-    form label {{ display: block; margin-top: 10px; }}
-    input, button {{ padding: 6px; width: 100%; margin-top: 4px; }}
-    button {{ background-color: #28a745; color: white; border: none; margin-top: 20px; }}
+    body { font-family: Arial, sans-serif; max-width: 400px; margin: 30px auto; }
+    form label { display: block; margin-top: 10px; }
+    input, button { padding: 6px; width: 100%; margin-top: 4px; }
+    button { background-color: #28a745; color: white; border: none; margin-top: 20px; }
   </style>
 </head>
 <body>
   <h2>Accedi al Torneo</h2>
-
   <form id="login-form">
     <label>Email: <input type="email" id="email" required></label>
     <label>Password: <input type="password" id="password" required></label>
     <button type="submit">Login</button>
   </form>
-
   <p id="status" style="color: red; margin-top: 20px;"></p>
 
   <script>
@@ -32,18 +31,16 @@
       e.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-
-      const {{ data, error }} = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
         document.getElementById('status').textContent = 'Errore: ' + error.message;
       } else {
         document.getElementById('status').style.color = 'green';
-        document.getElementById('status').textContent = 'Login effettuato!';
+        document.getElementById('status').textContent = 'Accesso effettuato!';
         window.location.href = 'livello-a.html';
       }
     });
   </script>
 </body>
 </html>
-
