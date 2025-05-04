@@ -1,10 +1,11 @@
 
 const supabase = supabase.createClient(
-  'https://TUO-PROGETTO.supabase.co',  // 🔁 Sostituisci con il tuo Supabase URL
-  'CHIAVE-PUBBLICA'                    // 🔁 Sostituisci con la tua chiave anon
+  'https://zhueyazcbctwnkfflckr.supabase.co',  // 🔁 Inserisci il tuo URL
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpodWV5YXpjYmN0d25rZmZsY2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzOTIwNTUsImV4cCI6MjA2MTk2ODA1NX0.Ohx2wRmw2-QVqJ8iYgeJwp8mWL8bTeLKkNF-HG4eTkE'                    // 🔁 Inserisci la tua chiave anon
 );
 
-let currentTable = 'partite_a'; // può essere 'partite_b', 'partite_c', ecc.
+let currentTable = 'partite_a'; // Cambia questo se stai lavorando su B, C, ecc.
+
 const authArea = document.getElementById('auth-area');
 const tbodyResults = document.getElementById("calendario-body");
 const tbodyStandings = document.getElementById("standings-body");
@@ -98,9 +99,27 @@ async function loadDati() {
 }
 
 async function aggiungiPartita() {
-  const { error } = await supabase.from(currentTable).insert([{ squadra1: "", squadra2: "" }]);
-  if (error) alert("Errore: " + error.message);
-  else loadDati();
+  const { data, error } = await supabase.from(currentTable).insert([
+    {
+      squadra1: "Squadra 1",
+      squadra2: "Squadra 2",
+      campo: "",
+      ora: null,
+      arbitro: "",
+      set1_vinti: 0,
+      set2_vinti: 0,
+      punti1: 0,
+      punti2: 0
+    }
+  ]);
+
+  if (error) {
+    console.error("Errore Supabase:", error);
+    alert("Errore Supabase: " + error.message);
+  } else {
+    console.log("Partita aggiunta:", data);
+    loadDati();
+  }
 }
 
 async function setupAuth() {
