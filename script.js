@@ -1,68 +1,128 @@
-// script.js
 
-// Credenziali di accesso (demo)
-const validUsername = 'admin';
-const validPassword = 'password123';
+const supabase = supabase.createClient(
+  'https://TUO-PROGETTO.supabase.co',  // 🔁 Sostituisci con il tuo Supabase URL
+  'CHIAVE-PUBBLICA'                    // 🔁 Sostituisci con la tua chiave anon
+);
 
-// Gestione Login (usato in login.html)
-function handleLogin(event) {
-  event.preventDefault();
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
+let currentTable = 'partite_a'; // può essere 'partite_b', 'partite_c', ecc.
+const authArea = document.getElementById('auth-area');
+const tbodyResults = document.getElementById("calendario-body");
+const tbodyStandings = document.getElementById("standings-body");
 
-  if (username === validUsername && password === validPassword) {
-    localStorage.setItem('loggedIn', 'true');
-    window.location.href = 'edit.html';
-  } else {
-    alert('Nome utente o password errati.');
+function editableCell(value, onChange) {
+  const td = document.createElement("td");
+  td.contentEditable = true;
+  td.textContent = value;
+  td.addEventListener("blur", () => {
+    const newVal = td.textContent.trim();
+    if (newVal !== value) onChange(newVal);
+  });
+  return td;
+}
+
+async function loadDati() {
+  const { data: partite, error } = await supabase.from(currentTable).select("*").order("ora");
+
+  if (error) {
+    tbodyResults.innerHTML = `<tr><td colspan="10">Errore: ${error.message}</td></tr>`;
+    return;
   }
-}
 
-// Verifica accesso (usato in edit.html)
-function checkAuthentication() {
-  if (localStorage.getItem('loggedIn') !== 'true') {
-    alert('Accesso non autorizzato. Effettua il login.');
-    window.location.href = 'login.html';
-  }
-}
+  tbodyResults.innerHTML = "";
+  const stats = {};
 
-// Carica livelli nei campi di input (usato in edit.html)
-function loadLevels() {
-  document.getElementById('level1').value = localStorage.getItem('level1') || 'A';
-  document.getElementById('level2').value = localStorage.getItem('level2') || 'B+';
-  document.getElementById('level3').value = localStorage.getItem('level3') || 'B';
-  document.getElementById('level4').value = localStorage.getItem('level4') || 'C+';
-  document.getElementById('level5').value = localStorage.getItem('level5') || 'C';
-}
+  partite.forEach(p => {
+    const tr = document.createElement("tr");
 
-// Salva livelli da form (usato in edit.html)
-function saveLevels(event) {
-  event.preventDefault();
-  localStorage.setItem('level1', document.getElementById('level1').value);
-  localStorage.setItem('level2', document.getElementById('level2').value);
-  localStorage.setItem('level3', document.getElementById('level3').value);
-  localStorage.setItem('level4', document.getElementById('level4').value);
-  localStorage.setItem('level5', document.getElementById('level5').value);
-  alert('Livelli aggiornati con successo!');
-  window.location.href = 'index.html';
-}
+    const update = (field, val) => {
+      supabase.from(currentTable).update({ [field]: isNaN(val) ? val : parseInt(val) })
+        .eq("id", p.id);
+    };
 
-// Aggiorna livelli su index.html se esistono
-function updateDisplayedLevels() {
-  const mapping = [
-    { id: 'displayLevelA', key: 'level1' },
-    { id: 'displayLevelBPlus', key: 'level2' },
-    { id: 'displayLevelB', key: 'level3' },
-    { id: 'displayLevelCPlus', key: 'level4' },
-    { id: 'displayLevelC', key: 'level5' },
-  ];
+    const fields = [
+      ["squadra1", p.squadra1], ["set1_vinti", p.set1_vinti], ["punti1", p.punti1],
+      ["squadra2", p.squadra2], ["set2_vinti", p.set2_vinti], ["punti2", p.punti2],
+      ["campo", p.campo], ["ora", p.ora], ["arbitro", p.arbitro]
+    ];
 
-  mapping.forEach(({ id, key }) => {
-    const element = document.getElementById(id);
-    if (element && localStorage.getItem(key)) {
-      element.textContent = localStorage.getItem(key);
-    }
+    fields.forEach(([key, val]) => {
+      tr.appendChild(editableCell(val ?? "", newVal => update(key, newVal)));
+    });
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "btn btn-sm btn-danger";
+    deleteBtn.textContent = "Elimina";
+    deleteBtn.onclick = async () => {
+      await supabase.from(currentTable).delete().eq("id", p.id);
+      loadDati();
+    };
+
+    const tdAzioni = document.createElement("td");
+    tdAzioni.appendChild(deleteBtn);
+    tr.appendChild(tdAzioni);
+
+    tbodyResults.appendChild(tr);
+
+    [p.squadra1, p.squadra2].forEach(t => {
+      if (!stats[t]) stats[t] = { setVinti: 0, setPersi: 0, puntiFatti: 0, puntiSubiti: 0 };
+    });
+    stats[p.squadra1].setVinti += p.set1_vinti || 0;
+    stats[p.squadra1].setPersi += p.set2_vinti || 0;
+    stats[p.squadra1].puntiFatti += p.punti1 || 0;
+    stats[p.squadra1].puntiSubiti += p.punti2 || 0;
+
+    stats[p.squadra2].setVinti += p.set2_vinti || 0;
+    stats[p.squadra2].setPersi += p.set1_vinti || 0;
+    stats[p.squadra2].puntiFatti += p.punti2 || 0;
+    stats[p.squadra2].puntiSubiti += p.punti1 || 0;
+  });
+
+  const sorted = Object.entries(stats).sort((a, b) => {
+    if (b[1].setVinti !== a[1].setVinti) return b[1].setVinti - a[1].setVinti;
+    return (b[1].puntiFatti - b[1].puntiSubiti) - (a[1].puntiFatti - a[1].puntiSubiti);
+  });
+
+  tbodyStandings.innerHTML = "";
+  sorted.forEach(([team, d]) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${team}</td>
+      <td>${d.setVinti}</td>
+      <td>${d.setPersi}</td>
+      <td>${d.puntiFatti}</td>
+      <td>${d.puntiSubiti}</td>
+      <td>${d.puntiFatti - d.puntiSubiti}</td>
+    `;
+    tbodyStandings.appendChild(row);
   });
 }
 
- 
+async function aggiungiPartita() {
+  const { error } = await supabase.from(currentTable).insert([{ squadra1: "", squadra2: "" }]);
+  if (error) alert("Errore: " + error.message);
+  else loadDati();
+}
+
+async function setupAuth() {
+  const { data } = await supabase.auth.getSession();
+  if (data.session) {
+    authArea.innerHTML = `
+      <span class="me-2">Bentornato!</span>
+      <button class="btn btn-danger btn-sm" onclick="logout()">Logout</button>
+    `;
+  } else {
+    authArea.innerHTML = `
+      <button class="btn btn-primary btn-sm" onclick="window.location.href='login.html'">Login</button>
+    `;
+  }
+}
+
+async function logout() {
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await setupAuth();
+  await loadDati();
+});
