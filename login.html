@@ -2,46 +2,50 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Login</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 400px; margin: 30px auto; }
+    form label { display: block; margin-top: 10px; }
+    input, button { padding: 6px; width: 100%; margin-top: 4px; }
+    button { background-color: #28a745; color: white; border: none; margin-top: 20px; }
+  </style>
 </head>
 <body>
-  <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <h2 class="text-center mb-4">Accesso</h2>
-        <form id="loginForm">
-          <div class="mb-3">
-            <label for="username" class="form-label">Nome utente</label>
-            <input type="text" class="form-control" id="username" required>
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" required>
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Accedi</button>
-        </form>
-      </div>
-    </div>
-  </div>
+  <h2>Accedi</h2>
+
+  <form id="login-form">
+    <label>Email: <input type="email" name="email" required></label>
+    <label>Password: <input type="password" name="password" required></label>
+    <button type="submit">Login</button>
+  </form>
+
+  <p id="status" style="color: red; margin-top: 20px;"></p>
 
   <script>
-    const validUsername = 'admin';
-    const validPassword = 'password123';
+    const supabase = supabase.createClient(
+      'https://zhueyazcbctwnkfflckr.supabase.co',   // 🔁 Sostituisci con il tuo URL
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpodWV5YXpjYmN0d25rZmZsY2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzOTIwNTUsImV4cCI6MjA2MTk2ODA1NX0.Ohx2wRmw2-QVqJ8iYgeJwp8mWL8bTeLKkNF-HG4eTkE'                     // 🔁 Sostituisci con la tua chiave anon
+    );
 
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+      const formData = new FormData(e.target);
+      const email = formData.get('email');
+      const password = formData.get('password');
 
-      if (username === validUsername && password === validPassword) {
-        localStorage.setItem('loggedIn', 'true');
-        window.location.href = 'edit.html';
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        document.getElementById('status').textContent = 'Errore: ' + error.message;
       } else {
-        alert('Nome utente o password errati.');
+        document.getElementById('status').style.color = 'green';
+        document.getElementById('status').textContent = 'Accesso riuscito!';
+        // Redirect alla pagina di modifica
+        window.location.href = 'edit.html';
       }
     });
   </script>
 </body>
 </html>
+
