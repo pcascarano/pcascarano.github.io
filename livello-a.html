@@ -10,11 +10,7 @@
 <body>
   <div class="container mt-4">
     <h1>Classifica - Livello A</h1>
-    
-<div class="mb-3">
-  <input type="text" id="search-team" class="form-control" placeholder="Cerca una squadra..." />
-</div>
-<table class="table table-bordered">
+    <table class="table table-bordered">
       <thead class="table-light">
         <tr>
           <th>Squadra</th>
@@ -31,7 +27,11 @@
     </table>
 
     <h2 class="mt-5">Calendario Partite e Risultati</h2>
-    <table class="table table-striped">
+    
+<div class="mb-3">
+  <input type="text" id="search-calendar" class="form-control" placeholder="Cerca una squadra nel calendario..." />
+</div>
+<table class="table table-striped">
       <thead class="table-light">
         <tr>
           <th>Squadra 1</th>
@@ -137,12 +137,12 @@
             tbodyStandings.appendChild(row);
           });
         
-  document.getElementById("search-team").addEventListener("input", function () {
+  document.getElementById("search-calendar").addEventListener("input", function () {
     const search = this.value.toLowerCase();
-    const rows = document.querySelectorAll("#standings-body tr");
+    const rows = document.querySelectorAll("#calendario-body tr");
     rows.forEach(row => {
-      const teamName = row.querySelector("td")?.textContent.toLowerCase() || "";
-      row.style.display = teamName.includes(search) ? "" : "none";
+      const text = row.textContent.toLowerCase();
+      row.style.backgroundColor = text.includes(search) && search !== "" ? "#ffff99" : "";
     });
   });
 
