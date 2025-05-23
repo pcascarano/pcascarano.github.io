@@ -10,7 +10,11 @@
 <body>
   <div class="container mt-4">
     <h1>Classifica - Livello A</h1>
-    <table class="table table-bordered">
+    
+<div class="mb-3">
+  <input type="text" id="search-team" class="form-control" placeholder="Cerca una squadra..." />
+</div>
+<table class="table table-bordered">
       <thead class="table-light">
         <tr>
           <th>Squadra</th>
@@ -132,7 +136,16 @@
             `;
             tbodyStandings.appendChild(row);
           });
-        });
+        
+  document.getElementById("search-team").addEventListener("input", function () {
+    const search = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#standings-body tr");
+    rows.forEach(row => {
+      const teamName = row.querySelector("td")?.textContent.toLowerCase() || "";
+      row.style.display = teamName.includes(search) ? "" : "none";
+    });
+  });
+
     });
   </script>
 </body>
