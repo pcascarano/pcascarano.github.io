@@ -26,7 +26,12 @@
     </table>
 
     <h2 class="mt-5">Calendario Partite e Risultati</h2>
-    <table class="table table-striped">
+    
+<div class="mb-3">
+  <button class="btn btn-primary mb-2" id="toggle-search">Cerca squadra</button>
+  <input type="text" id="search-calendar" class="form-control" placeholder="Inserisci nome squadra..." style="display: none;" />
+</div>
+<table class="table table-striped">
       <thead class="table-light">
         <tr>
           <th>Squadra 1</th>
@@ -60,6 +65,26 @@
           const stats = {};
 
           tbodyResults.innerHTML = "";
+          const toggleBtn = document.getElementById("toggle-search");
+          const inputField = document.getElementById("search-calendar");
+
+          toggleBtn.addEventListener("click", () => {
+            inputField.style.display = inputField.style.display === "none" ? "block" : "none";
+            inputField.focus();
+          });
+
+          inputField.addEventListener("input", () => {
+            const search = inputField.value.toLowerCase();
+            const rows = document.querySelectorAll("#calendario-body tr");
+            rows.forEach(row => {
+              const squadra1 = row.children[0]?.textContent.toLowerCase() || "";
+              const squadra2 = row.children[3]?.textContent.toLowerCase() || "";
+              const match = (squadra1.includes(search) || squadra2.includes(search)) && search !== "";
+              row.style.display = match || search === "" ? "" : "none";
+              row.style.backgroundColor = match ? "#ffff99" : "";
+            });
+          });
+
 
           lines.forEach(line => {
             const cells = line.split(",");
