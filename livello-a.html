@@ -65,6 +65,17 @@
           const stats = {};
 
           tbodyResults.innerHTML = "";
+          const searchInput = document.getElementById("search-calendar");
+          searchInput.addEventListener("input", () => {
+            const search = searchInput.value.toLowerCase();
+            const rows = document.querySelectorAll("#calendario-body tr");
+            rows.forEach(row => {
+              const squadra1 = row.children[0]?.textContent.toLowerCase() || "";
+              const squadra2 = row.children[3]?.textContent.toLowerCase() || "";
+              row.style.backgroundColor = (squadra1.includes(search) || squadra2.includes(search)) && search !== "" ? "#ffff99" : "";
+            });
+          });
+
 
           lines.forEach(line => {
             const cells = line.split(",");
@@ -91,24 +102,6 @@
               <td>${arbitro}</td>
             `;
             tbodyResults.appendChild(tr);
-
-            // Evidenziazione in base al campo di ricerca
-            const searchInput = document.getElementById("search-calendar");
-            if (searchInput && !searchInput.hasListenerAttached) {
-              searchInput.addEventListener("input", function () {
-                const search = this.value.toLowerCase();
-                const rows = document.querySelectorAll("#calendario-body tr");
-                rows.forEach(row => {
-                  const cells = row.querySelectorAll("td");
-                  if (!cells.length) return;
-                  const squadra1 = cells[0].textContent.toLowerCase();
-                  const squadra2 = cells[3].textContent.toLowerCase();
-                  row.style.backgroundColor = (squadra1.includes(search) || squadra2.includes(search)) && search !== "" ? "#ffff99" : "";
-                });
-              });
-              searchInput.hasListenerAttached = true;
-            }
-
 
             [team1, team2].forEach(team => {
               if (!stats[team]) {
