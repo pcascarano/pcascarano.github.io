@@ -29,7 +29,8 @@
     <h2 class="mt-5">Calendario Partite e Risultati</h2>
     
 <div class="mb-3">
-  <input type="text" id="search-calendar" class="form-control" placeholder="Cerca una squadra nel calendario..." />
+  <button class="btn btn-primary mb-2" id="toggle-search">Cerca squadra</button>
+  <input type="text" id="search-calendar" class="form-control" placeholder="Inserisci nome squadra..." style="display: none;" />
 </div>
 <table class="table table-striped">
       <thead class="table-light">
@@ -65,14 +66,23 @@
           const stats = {};
 
           tbodyResults.innerHTML = "";
-          const searchInput = document.getElementById("search-calendar");
-          searchInput.addEventListener("input", () => {
-            const search = searchInput.value.toLowerCase();
+          const toggleBtn = document.getElementById("toggle-search");
+          const inputField = document.getElementById("search-calendar");
+
+          toggleBtn.addEventListener("click", () => {
+            inputField.style.display = inputField.style.display === "none" ? "block" : "none";
+            inputField.focus();
+          });
+
+          inputField.addEventListener("input", () => {
+            const search = inputField.value.toLowerCase();
             const rows = document.querySelectorAll("#calendario-body tr");
             rows.forEach(row => {
               const squadra1 = row.children[0]?.textContent.toLowerCase() || "";
               const squadra2 = row.children[3]?.textContent.toLowerCase() || "";
-              row.style.backgroundColor = (squadra1.includes(search) || squadra2.includes(search)) && search !== "" ? "#ffff99" : "";
+              const match = (squadra1.includes(search) || squadra2.includes(search)) && search !== "";
+              row.style.display = match || search === "" ? "" : "none";
+              row.style.backgroundColor = match ? "#ffff99" : "";
             });
           });
 
