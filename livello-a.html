@@ -139,8 +139,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const search = this.value.toLowerCase();
     const rows = document.querySelectorAll("#calendario-body tr");
     rows.forEach(row => {
-      const text = row.textContent.toLowerCase();
-      row.style.backgroundColor = text.includes(search) && search !== "" ? "#ffff99" : "";
+      const cells = row.querySelectorAll("td");
+      if (!cells.length) return;
+
+      const squadra1 = cells[0].textContent.toLowerCase();
+      const squadra2 = cells[3].textContent.toLowerCase();
+
+      if ((squadra1.includes(search) || squadra2.includes(search)) && search !== "") {
+        row.style.backgroundColor = "#ffff99";
+      } else {
+        row.style.backgroundColor = "";
+      }
     });
   });
 });
