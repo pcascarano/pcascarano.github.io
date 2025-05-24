@@ -100,13 +100,20 @@
       0 0 10px #ff66cc,
       0 0 20px #ff3399,
       0 0 30px #cc00cc;
+    animation: flicker 1.2s infinite alternate;
+  }
+
+  @keyframes flicker {
+    0%   { opacity: 1; text-shadow: 0 0 5px #ff66cc, 0 0 10px #ff66cc, 0 0 20px #ff3399, 0 0 30px #cc00cc; }
+    50%  { opacity: 0.4; text-shadow: 0 0 2px #ff66cc, 0 0 5px #ff66cc; }
+    100% { opacity: 1; text-shadow: 0 0 5px #ff66cc, 0 0 10px #ff66cc, 0 0 20px #ff3399, 0 0 30px #cc00cc; }
   }
 </style>
   
 </head>
 <body>
   <div class="container">
-    <h1 class="zodiac-title">Zodiac</h1>
+    <h1 class="zodiac-title">ZODIAC</h1>
     <h1>17° Bogatournament</h1>
     <p>20–21 Giugno 2025, Bologna</p>
     <div class="buttons">
