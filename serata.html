@@ -28,20 +28,9 @@
       margin-bottom: 20px;
     }
 
-    .maps-link {
+    .button {
       display: inline-block;
-      margin-bottom: 30px;
-      color: #007BFF;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .maps-link:hover {
-      text-decoration: underline;
-    }
-
-    .back-button {
-      display: inline-block;
+      margin: 10px 10px 30px 0;
       padding: 10px 20px;
       background-color: #007BFF;
       color: white;
@@ -51,8 +40,12 @@
       transition: background-color 0.3s;
     }
 
-    .back-button:hover {
+    .button:hover {
       background-color: #0056b3;
+    }
+
+    .button-group {
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -62,19 +55,24 @@
   <h2>Dalle ore 19: Relax, bar e piscina riservata</h2>
   <p>Un momento per rilassarsi dopo una giornata intensa di gioco, con accesso esclusivo al bar e alla piscina.</p>
   <p><strong>Luogo:</strong> Living Place Hotel Bologna, Via Properzia de’ Rossi</p>
-  <a class="maps-link" href="https://www.google.com/maps?q=Living+Place+Hotel+Bologna,+Via+Properzia+de+Rossi" target="_blank">Apri su Google Maps</a>
+  <div class="button-group">
+    <a class="button" href="https://www.google.com/maps?q=Living+Place+Hotel+Bologna,+Via+Properzia+de+Rossi" target="_blank">Apri su Google Maps</a>
+  </div>
 
   <h2>Dalle 20: Aperitivo, cena e premiazioni con pool party</h2>
   <p>Festeggiamo con stile: buon cibo, musica, premi e festa in piscina!</p>
   <p><strong>Luogo:</strong> Living Place Hotel Bologna</p>
-  <a class="maps-link" href="https://www.google.com/maps?q=Living+Place+Hotel+Bologna,+Via+Properzia+de+Rossi" target="_blank">Apri su Google Maps</a>
+  <div class="button-group">
+    <a class="button" href="https://www.google.com/maps?q=Living+Place+Hotel+Bologna,+Via+Properzia+de+Rossi" target="_blank">Apri su Google Maps</a>
+  </div>
 
   <h2>Dalle 23: Il nostro mitico RED ci aspetta!</h2>
   <p>Chiudiamo la serata in grande stile al RED Bologna per il party finale.</p>
   <p><strong>Luogo:</strong> RED Bologna, Via del Tipografo 2</p>
-  <a class="maps-link" href="https://www.google.com/maps?q=RED+Bologna,+Via+del+Tipografo+2" target="_blank">Apri su Google Maps</a>
+  <div class="button-group">
+    <a class="button" href="https://www.google.com/maps?q=RED+Bologna,+Via+del+Tipografo+2" target="_blank">Apri su Google Maps</a>
+  </div>
 
-  <br><br>
-  <a href="index.html" class="back-button">Torna alla Home</a>
+  <a href="index.html" class="button">Torna alla Home</a>
 </body>
 </html>
