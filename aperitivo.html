@@ -2,27 +2,38 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Serata</title>
+  <title>Aperitivo di Benvenuto</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 40px;
-      background-color: #f4f4f4;
+      background-color: #f9f9f9;
       color: #333;
     }
 
     h1 {
-      font-size: 2em;
+      font-size: 2.5em;
       margin-bottom: 20px;
+      color: #C71585;
     }
 
     p {
       font-size: 1.2em;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
 
-    .back-button {
+    .location {
+      font-weight: bold;
+      color: #007BFF;
+    }
+
+    .button-group {
+      margin-top: 40px;
+    }
+
+    .btn {
       display: inline-block;
+      margin-right: 10px;
       padding: 10px 20px;
       background-color: #007BFF;
       color: white;
@@ -32,15 +43,23 @@
       transition: background-color 0.3s;
     }
 
-    .back-button:hover {
+    .btn:hover {
       background-color: #0056b3;
     }
   </style>
 </head>
 <body>
-  <h1>Informazioni sulla Serata</h1>
-  <p>Dettagli sull'evento serale qui.</p>
+  <h1>Aperitivo di Benvenuto</h1>
 
-  <a href="index.html" class="back-button">Torna alla Home</a>
+  <p><strong>Venerdì 20 Giugno 2025 - dalle ore 19</strong></p>
+  <p>Iniziamo il Bogatournament con un momento di incontro e festa!</p>
+  <p>L’aperitivo si terrà presso:</p>
+  <p class="location">Caffè Maxim, Piazza della Mercanzia 6, Bologna</p>
+  <p>Un’occasione perfetta per accogliere le squadre, socializzare e dare ufficialmente il via al weekend del torneo!</p>
+
+  <div class="button-group">
+    <a href="index.html" class="btn">Torna alla Home</a>
+    <a href="https://www.google.com/maps?q=Caffè+Maxim,+Piazza+della+Mercanzia+6,+Bologna" target="_blank" class="btn">Apri su Google Maps</a>
+  </div>
 </body>
 </html>
