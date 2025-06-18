@@ -1,7 +1,7 @@
 Squadra 1,Squadra 2,Campo,Ora,Arbitro,Set 1 Vinti,Set 2 Vinti,Punti 1,Punti 2
-Black Angels,Gli Oroscopati,1,09:00,Reggianal,,,,
-Cosmo Queens,Attacchi Ariete,2,09:00,Le Tose,,,,
-Le Tose,Reggianal,1,09:20,Black Angels,,,,
+Black Angels,Gli Oroscopati,1,09:00,Reggianal,1,0,25,18
+Cosmo Queens,Attacchi Ariete,2,09:00,Le Tose,0,1,16,25
+Le Tose,Reggianal,1,09:20,Black Angels,0,1,20,22
 Le Amiche di Rotroia,Mira Fuori,2,09:20,Le Bimbe di Nardi,,,,
 Le Bimbe di Nardi,Gli Oroscopati,1,09:40,Le Amiche di Rotroia,,,,
 Black Angels,Attacchi Ariete,2,09:40,Mira Fuori,,,,
